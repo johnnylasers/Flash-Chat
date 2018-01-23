@@ -21,9 +21,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //TODO: Initialise and Configure your Firebase here:
         FirebaseApp.configure()
         
-        let myDatabase = Database.database().reference()
-        
-        myDatabase.setValue("You've got data, again!!")
+//        let myDatabase = Database.database().reference()
+//        
+//        myDatabase.setValue("You've got data, again!!")
         
         //Firebase database security rule
 //        "rules": {

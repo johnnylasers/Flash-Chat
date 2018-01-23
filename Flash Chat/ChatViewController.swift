@@ -2,9 +2,7 @@
 //  ViewController.swift
 //  Flash Chat
 //
-//  Created by Angela Yu on 29/08/2015.
-//  Copyright (c) 2015 London App Brewery. All rights reserved.
-//
+
 
 import UIKit
 import Firebase
@@ -12,7 +10,7 @@ import Firebase
 class ChatViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
     
     // Declare instance variables here
-    
+    var messageArray : [Message] = [Message]()
     
     // We've pre-linked the IBOutlets
     @IBOutlet var heightConstraint: NSLayoutConstraint!
@@ -43,15 +41,14 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         messageTableView.register(UINib(nibName: "MessageCell", bundle: nil), forCellReuseIdentifier: "customMessageCell")
         
         configureTableView()
+        retrieveMessages()
         
     }
 
     ///////////////////////////////////////////
     
     //MARK: - TableView DataSource Methods
-    
-    
-    
+
     //TODO: Declare cellForRowAtIndexPath here:
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "customMessageCell", for: indexPath) as! CustomMessageCell
@@ -146,14 +143,26 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //TODO: Create the retrieveMessages method here:
     
-    
-
-    
-    
-    
-    @IBAction func logOutPressed(_ sender: AnyObject) {
+    func retrieveMessages() {
         
-        //TODO: Log out the user and send them back to WelcomeViewController
+        let messageDB = Database.database().reference().child("Messages")
+        
+        messageDB.observe(.childAdded) {
+            
+            (snapshot) in
+            
+            let snapshotValue = snapshot.value as! Dictionary<String, String>
+            
+            let sender = snapshotValue["Sender"]!
+            let text = snapshotValue["messageBody"]!
+            
+            print(sender, text)
+        }
+    }
+
+    //TODO: Log out the user and send them back to WelcomeViewController
+    @IBAction func logOutPressed(_ sender: AnyObject) {
+
         do {
             try Auth.auth().signOut()
             navigationController?.popToRootViewController(animated: true)

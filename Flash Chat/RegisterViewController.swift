@@ -7,7 +7,7 @@
 
 import UIKit
 import Firebase
-
+import SVProgressHUD
 
 class RegisterViewController: UIViewController {
 
@@ -30,6 +30,8 @@ class RegisterViewController: UIViewController {
   
     @IBAction func registerPressed(_ sender: AnyObject) {
         
+        SVProgressHUD.show()
+        
         //TODO: Set up a new user on our Firbase database
         //Asynchronous action!
         Auth.auth().createUser(withEmail: emailTextfield.text!, password: passwordTextfield.text!) {
@@ -39,6 +41,8 @@ class RegisterViewController: UIViewController {
                print(error!)
             } else {
                 print("Registration successful!")
+                
+                SVProgressHUD.dismiss()
                 //performSegue is a UIViewController method common to other derived classes
                 //but becuase now we are in a closure, we have to add "self." to the front of performSegue method call
                 self.performSegue(withIdentifier: "goToChat", sender: self)
